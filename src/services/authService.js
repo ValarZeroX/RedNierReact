@@ -28,19 +28,22 @@ export const logout = async (token) => {
   try {
     // 先获取 CSRF Token，设置 CSRF Cookie
     await axios.get('http://localhost/sanctum/csrf-cookie', { withCredentials: true });
-console.log(getCookie('XSRF-TOKEN'))
+// console.log(getCookie('XSRF-TOKEN'))
 //_token: getCookie('XSRF-TOKEN')
     // 发送登出请求
+    
     await axios.post(
       'http://localhost/api/logout',
       {  },
       {
         headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: 'application/json',
+          // Authorization: `Bearer ${token}`, //401
+          accept: 'application/json',
+          // 'Content-Type': 'application/json',
           'X-XSRF-TOKEN': getCookie('XSRF-TOKEN'),
         },
         withCredentials: true,
+        withXSRFToken: true
       }
     );
     // 清除本地的 token 和用户信息
@@ -57,7 +60,7 @@ export const fetchUserData = async (token) => {
   try {
     const response = await axios.get('http://localhost/api/user', {
       headers: {
-        Authorization: `Bearer ${token}`,
+        // Authorization: `Bearer ${token}`,
       },
       withCredentials: true,
     });
@@ -73,6 +76,13 @@ export const fetchUserData = async (token) => {
     return user;  // 返回用户数据
   } catch (error) {
     console.error('Error fetching user data:', error);
-    throw error;  // 将错误抛出，以便在组件中处理
+    if (error.response && (error.response.status === 401 || error.response.status === 409)) {
+      console.error('error.respons:', error.respons);
+      // 如果认证失败，清空 localStorage 并跳转到首页
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+    // throw error;  // 将错误抛出，以便在组件中处理
   }
 };

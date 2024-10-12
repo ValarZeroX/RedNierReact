@@ -12,13 +12,13 @@ function Home() {
     const getUserData = async () => {
       const token = localStorage.getItem('token');
       console.log(token);
-      if (token) {
+      // if (token) {
         // 调用 getUserData 函数获取用户数据
         const userData = await fetchUserData(token);
         if (userData) {
           setUser(userData); // 设置用户数据到 state
         }
-      }
+      // }
     };
 
     getUserData(); 
