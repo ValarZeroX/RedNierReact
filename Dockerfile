@@ -13,14 +13,17 @@ RUN npm install
 # 複製所有源代碼
 COPY . .
 
-# 構建 React 應用
-RUN npm run build
+# 使用 npm start 在開發模式下運行應用
+CMD ["npm", "start"]
 
-# 安裝 Serve 來提供靜態資源
-RUN npm install -g serve
+# # 構建 React 應用
+# RUN npm run build
 
-# 暴露前端應用埠
-EXPOSE 3000
+# # 安裝 Serve 來提供靜態資源
+# RUN npm install -g serve
 
-# 使用 Serve 提供編譯後的靜態文件
-CMD ["serve", "-s", "build"]
+# # 暴露前端應用埠
+# EXPOSE 3000
+
+# # 使用 Serve 提供編譯後的靜態文件
+# CMD ["serve", "-s", "build"]
