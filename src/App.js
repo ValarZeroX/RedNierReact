@@ -1,19 +1,11 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import LogoutPage from './pages/LogoutPage';
-import OAuthCallback from './components/Auth/OAuthCallback';
+import { BrowserRouter as Router } from 'react-router-dom';
+import AppRoutes from './routes/AppRoutes';  // 引入路由组件
 
 function App() {
   return (
       <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/login/callback" element={<OAuthCallback />} />
-          <Route path="/logout" element={<LogoutPage />} />
-        </Routes>
+        <AppRoutes />  {/* 使用提取的路由组件 */}
       </Router>
   );
 }

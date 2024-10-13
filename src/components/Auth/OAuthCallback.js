@@ -11,6 +11,17 @@ function OAuthCallback() {
   });
 
   useEffect(() => {
+    const getUserData = async (token) => {
+        try {
+          const user = await fetchUserData(token);  // 从 authService 中获取用户数据
+          setUserData(user);
+          navigate('/');  // 重定向到首页
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      };
+
+      
     if (!tokenProcessed) {
       // 從 URL 中獲取 token
       const urlParams = new URLSearchParams(window.location.search);
@@ -36,15 +47,6 @@ function OAuthCallback() {
     }
   }, [tokenProcessed, navigate]);
 
-  const getUserData = async (token) => {
-    try {
-      const user = await fetchUserData(token);  // 从 authService 中获取用户数据
-      setUserData(user);
-      navigate('/');  // 重定向到首页
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
-  };
 
 
   return (
