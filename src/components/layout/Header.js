@@ -3,9 +3,11 @@ import { Autocomplete, Group, Burger, rem, ActionIcon, useMantineColorScheme } f
 import { IconSearch } from '@tabler/icons-react';
 // import { MantineLogo } from '@mantinex/mantine-logo';
 import classes from '../../assets/topbar.module.css';
-import { IconBrandMantine, IconBrightnessDown, IconMoon, IconLogin } from '@tabler/icons-react';
+import { IconBrandMantine, IconBrightnessDown, IconMoon, IconLogin, IconLanguage } from '@tabler/icons-react';
 import Login from '../auth/Login';
 import { useDisclosure } from '@mantine/hooks';
+import { useTranslation } from 'react-i18next';
+
 
 const links = [
   { link: '/about', label: 'Features' },
@@ -18,6 +20,12 @@ function Header({ opened, toggle }) {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const Icon = colorScheme === 'dark' ? IconBrightnessDown : IconMoon;
   const [loginModalOpened, { open: openLoginModal, close: closeLoginModal }] = useDisclosure(false);
+  const { i18n, t } = useTranslation();
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'en' ? 'zhtw' : 'en';
+    i18n.changeLanguage(newLang);
+  };
+
 
   const items = links.map((link) => (
     <a
@@ -57,6 +65,9 @@ function Header({ opened, toggle }) {
           />
           <ActionIcon variant="default" size="lg" onClick={openLoginModal}>
             <IconLogin />
+          </ActionIcon>
+          <ActionIcon variant="default" size="lg" onClick={toggleLanguage}>
+            <IconLanguage />
           </ActionIcon>
           <ActionIcon
             variant="default"
