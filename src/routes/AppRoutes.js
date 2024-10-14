@@ -18,7 +18,6 @@ const AppRoutes = () => {
           <Route path="/*" element={<MainRoutes />} />
         </Route>
         <Route path="/auth/callback" element={<AuthCallback />} />
-        <Route path="/verify-email" element={<VerifyEmail />} />
       </Routes>
     </Router>
   );
