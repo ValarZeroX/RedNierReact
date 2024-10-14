@@ -1,11 +1,16 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from '../pages/Main/Home';
+import Register from '../pages/Register';
+import Login from '../components/auth/Login';
 
 const MainRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Home />}>
+        <Route index element={<Login />} />
+        <Route path="register" element={<Register />} />
+      </Route>
     </Routes>
   );
 };

@@ -1,7 +1,8 @@
 import React from 'react';
 import Header from '../../components/layout/Header';
-import { AppShell, Burger } from '@mantine/core';
+import { AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { Outlet } from 'react-router-dom';
 
 function Home() {
     const [opened, { toggle }] = useDisclosure();
@@ -22,7 +23,9 @@ function Home() {
   
         <AppShell.Navbar p="md">Navbar</AppShell.Navbar>
   
-        <AppShell.Main>Main</AppShell.Main>
+        <AppShell.Main>
+          <Outlet />
+        </AppShell.Main>
       </AppShell>
     );
 }

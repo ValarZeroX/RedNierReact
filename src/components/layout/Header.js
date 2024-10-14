@@ -1,9 +1,12 @@
-import { Autocomplete, Group, Burger, rem, ActionIcon, useMantineColorScheme } from '@mantine/core';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { isAuthenticated, logout } from '../../services/authService';
+import { Autocomplete, Group, Burger, rem, ActionIcon, useMantineColorScheme, Button } from '@mantine/core';
 // import { useColorScheme  } from '@mantine/hooks';
 import { IconSearch } from '@tabler/icons-react';
 // import { MantineLogo } from '@mantinex/mantine-logo';
 import classes from '../../assets/topbar.module.css';
-import { IconBrandMantine, IconBrightnessDown, IconMoon, IconLogin, IconLanguage } from '@tabler/icons-react';
+import { IconBrandMantine, IconBrightnessDown, IconMoon, IconLogin, IconLanguage, IconLogout } from '@tabler/icons-react';
 import Login from '../auth/Login';
 import { useDisclosure } from '@mantine/hooks';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +28,31 @@ function Header({ opened, toggle }) {
     const newLang = i18n.language === 'en' ? 'zhtw' : 'en';
     i18n.changeLanguage(newLang);
   };
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      const authStatus = await isAuthenticated();
+      console.log('Authentication status:', authStatus); // 添加这行
+      setIsLoggedIn(authStatus);
+    };
+    checkAuthStatus();
+  }, []);
+
+  useEffect(() => {
+    console.log('isLoggedIn state updated:', isLoggedIn); // 添加这行
+  }, [isLoggedIn]);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setIsLoggedIn(false);
+    } catch (error) {
+      console.error('登出时发生错误:', error);
+      // 即使发生错误，也将用户视为已登出
+      setIsLoggedIn(false);
+    }
+  };
 
   const items = links.map((link) => (
     <a
@@ -40,6 +67,7 @@ function Header({ opened, toggle }) {
 
   return (
     <div className={classes.header}>
+      {console.log('Rendering Header, isLoggedIn:', isLoggedIn)} {/* 添加这行 */}
       <div className={classes.inner}>
         <Group>
           <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="sm" />
@@ -63,10 +91,16 @@ function Header({ opened, toggle }) {
             data={['React', 'Angular', 'Vue', 'Next.js', 'Riot.js', 'Svelte', 'Blitz.js']}
             visibleFrom="xs"
           />
-          <ActionIcon variant="default" size="lg" onClick={openLoginModal}>
-            <IconLogin />
-          </ActionIcon>
-          <ActionIcon variant="default" size="lg" onClick={toggleLanguage}>
+           {isLoggedIn ? (
+            <ActionIcon variant="default" size="lg" onClick={handleLogout} color="red" aria-label="Logout">
+              <IconLogout />
+            </ActionIcon>
+          ) : (
+            <ActionIcon variant="default" size="lg" onClick={openLoginModal} aria-label="Login">
+              <IconLogin />
+            </ActionIcon>
+          )}
+          <ActionIcon variant="default" size="lg" onClick={toggleLanguage} aria-label="Language">
             <IconLanguage />
           </ActionIcon>
           <ActionIcon

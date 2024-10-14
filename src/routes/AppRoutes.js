@@ -1,25 +1,16 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MainRoutes from './MainRoutes';
-// import MemberRoutes from './MemberRoutes';
-// import ForumRoutes from './ForumRoutes';
-// import AdminRoutes from './AdminRoutes';
+import AuthCallback from '../components/auth/AuthCallback';
 
 const AppRoutes = () => {
   return (
-    <Routes>
-      {/* 主要路由 */}
-      <Route path="/*" element={<MainRoutes />} />
-
-      {/* 会员后台路由 */}
-      {/* <Route path="/dashboard/*" element={<MemberRoutes />} /> */}
-
-      {/* 讨论区路由 */}
-      {/* <Route path="/forum/*" element={<ForumRoutes />} /> */}
-
-      {/* 管理后台路由 */}
-      {/* <Route path="/admin/*" element={<AdminRoutes />} /> */}
-    </Routes>
+    <Router>
+      <Routes>
+        <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route path="/*" element={<MainRoutes />} />
+      </Routes>
+    </Router>
   );
 };
 

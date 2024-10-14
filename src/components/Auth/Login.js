@@ -1,17 +1,14 @@
 // import { useDisclosure } from '@mantine/hooks';
-import React, { useEffect } from 'react';
-import { Button, Container, Title, Text, Modal, Divider, Checkbox, TextInput, PasswordInput } from '@mantine/core';
+import React from 'react';
+import { Button, Container, Title, Text, Modal, Divider, Checkbox, TextInput, PasswordInput, Paper } from '@mantine/core';
 import { loginWithGoogle, processTokenFromURL } from '../../services/authService';  // 引入 authService 中的函数
 import { IconBrandGoogleFilled, IconBrandFacebookFilled } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
+import { Link } from 'react-router-dom';
 
 function Login({ opened, close }) {
     const { t } = useTranslation();
-    useEffect(() => {
-        // 处理 URL 中的 token
-        processTokenFromURL();
-    }, []);
 
     const form = useForm({
         mode: 'uncontrolled',
@@ -20,13 +17,16 @@ function Login({ opened, close }) {
             password: '',
             termsOfService: false,
         },
-
         validate: {
             email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
             confirmPassword: (value, values) =>
                 value !== values.password ? 'Passwords did not match' : null,
         },
     });
+
+    const handleRegisterClick = (e) => {
+        close(); // 關閉 Modal
+    };
 
     return (
         <>
@@ -69,7 +69,9 @@ function Login({ opened, close }) {
                     <Button justify="space-between" fullWidth leftSection={<IconBrandFacebookFilled size={14} />} variant="default" style={{ marginBottom: 10 }} rightSection={<span />}>
                         {t('login.facebook')}
                     </Button>
-                    <Text size="sm" style={{ marginBottom: 30 }}>註冊</Text>    
+                    <Text size="sm" style={{ marginBottom: 30 }}>
+                        還沒有帳號？ <Link to="/register" onClick={handleRegisterClick}>註冊</Link>
+                    </Text>
                 </Container>
             </Modal>
             {/* <Button onClick={open}>Open centered Modal</Button> */}

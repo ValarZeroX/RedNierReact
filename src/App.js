@@ -1,17 +1,11 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import AppRoutes from './routes/AppRoutes';  // 引入路由组件
-
-
-
+import AppRoutes from './routes/AppRoutes';
 
 function App() {
-  
-
   return (
-      <Router>
-        <AppRoutes />  {/* 使用提取的路由组件 */}
-      </Router>
+    <div>
+      <AppRoutes />
+    </div>
   );
 }
 

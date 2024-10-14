@@ -8,7 +8,7 @@ export const loginWithGoogle = async () => {
     await axios.get('http://localhost/sanctum/csrf-cookie', { withCredentials: true });
 
     // 跳转到后端 Google 登录的 OAuth 路径
-    window.location.href = 'http://localhost/login/google';
+    window.location.href = 'http://localhost/api/auth/google';
   } catch (error) {
     console.error('获取 CSRF Cookie 失败:', error);
   }
@@ -24,34 +24,30 @@ export const processTokenFromURL = () => {
 };
 
 // 获取 CSRF Cookie 和进行登出
-export const logout = async (token) => {
+export const logout = async () => {
   try {
-    // 先获取 CSRF Token，设置 CSRF Cookie
     await axios.get('http://localhost/sanctum/csrf-cookie', { withCredentials: true });
-// console.log(getCookie('XSRF-TOKEN'))
-//_token: getCookie('XSRF-TOKEN')
-    // 发送登出请求
-    
-    await axios.post(
-      'http://localhost/api/logout',
-      {  },
-      {
-        headers: {
-          // Authorization: `Bearer ${token}`, //401
-          accept: 'application/json',
-          // 'Content-Type': 'application/json',
-          'X-XSRF-TOKEN': getCookie('XSRF-TOKEN'),
-        },
-        withCredentials: true,
-        withXSRFToken: true
+    // 调用后端登出接口
+    await axios.post('http://localhost/api/logout', {}, {
+      withCredentials: true,
+      withXSRFToken: true,
+      headers: {
+        // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'X-XSRF-TOKEN': getCookie('XSRF-TOKEN'),
       }
-    );
-    // 清除本地的 token 和用户信息
+    });
+
+    // 清除本地存储中的令牌和用户信息
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    window.location.href = '/login'; // 登出后重定向
+
+    // 可能还需要重定向到登录页面或首页
+    window.location.href = '/';
   } catch (error) {
-    throw new Error('Logout failed');
+    console.error('登出失败:', error);
+    // 即使后端请求失败，也清除本地存储
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
   }
 };
 
@@ -85,4 +81,17 @@ export const fetchUserData = async (token) => {
     }
     // throw error;  // 将错误抛出，以便在组件中处理
   }
+};
+
+export const isAuthenticated = async () => {
+  const token = localStorage.getItem('token');
+  console.log('Checking authentication, token exists:', !!token); // 添加这行
+  if (!token) {
+    return false;
+  }
+  
+  // 这里可以添加向后端验证令牌有效性的逻辑
+  // 例如，发送一个请求到后端的验证端点
+  
+  return true; // 如果令牌有效
 };
