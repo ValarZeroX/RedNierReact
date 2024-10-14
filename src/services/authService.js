@@ -111,3 +111,12 @@ export const register = async (email, password) => {
   });
   return response.data; // 返回響應數據
 };
+
+export const resendVerificationEmail = async () => {
+  try {
+    const response = await axios.post('/email/verification-notification');
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};

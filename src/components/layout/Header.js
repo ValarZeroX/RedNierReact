@@ -10,6 +10,8 @@ import { IconBrandMantine, IconBrightnessDown, IconMoon, IconLogin, IconLanguage
 import Login from '../auth/Login';
 import { useDisclosure } from '@mantine/hooks';
 import { useTranslation } from 'react-i18next';
+// 新增這個 import
+import { IconLayoutDashboard } from '@tabler/icons-react';
 
 
 const links = [
@@ -19,7 +21,7 @@ const links = [
   { link: '/community', label: 'Community' },
 ];
 
-function Header({ opened, toggle }) {
+function Header({ opened, toggle, toggleUserMenu }) {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const Icon = colorScheme === 'dark' ? IconBrightnessDown : IconMoon;
   const [loginModalOpened, { open: openLoginModal, close: closeLoginModal }] = useDisclosure(false);
@@ -92,8 +94,11 @@ function Header({ opened, toggle }) {
             visibleFrom="xs"
           />
            {isLoggedIn ? (
-            <ActionIcon variant="default" size="lg" onClick={handleLogout} color="red" aria-label="Logout">
-              <IconLogout />
+            // <ActionIcon variant="filled" size="lg" onClick={handleLogout} color="red" aria-label="Logout">
+            //   <IconLogout />
+            // </ActionIcon>
+              <ActionIcon variant="default" size="lg" onClick={toggleUserMenu} aria-label="Toggle User/Origin Menu">
+              <IconLayoutDashboard style={{ width: '80%', height: '80%' }} stroke={1.5} />
             </ActionIcon>
           ) : (
             <ActionIcon variant="default" size="lg" onClick={openLoginModal} aria-label="Login">

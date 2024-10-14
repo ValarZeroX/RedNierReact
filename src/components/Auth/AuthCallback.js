@@ -8,7 +8,7 @@ function AuthCallback() {
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const token = searchParams.get('token');
-console.log("token"+token)
+
     if (token) {
       // 儲存 token 到 localStorage 或 state management
       localStorage.setItem('token', token);
