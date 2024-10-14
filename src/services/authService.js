@@ -95,3 +95,19 @@ export const isAuthenticated = async () => {
   
   return true; // 如果令牌有效
 };
+
+export const register = async (email, password) => {
+  await axios.get('http://localhost/sanctum/csrf-cookie', { withCredentials: true });
+  const response = await axios.post('http://localhost/api/register', {
+    email,
+    password
+  },
+  {
+    withCredentials: true,
+    withXSRFToken: true,
+    headers: {
+      'X-XSRF-TOKEN': getCookie('XSRF-TOKEN'),
+    }
+  });
+  return response.data; // 返回響應數據
+};
