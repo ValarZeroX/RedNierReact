@@ -48,6 +48,7 @@ export const logout = async () => {
     // 即使后端请求失败，也清除本地存储
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    window.location.href = '/';
   }
 };
 
@@ -145,7 +146,7 @@ export const login = async (email, password) => {
 
 export const resendVerificationEmail = async () => {
   await axios.get('http://localhost/sanctum/csrf-cookie', { withCredentials: true });
-  const response = await axios.post('/resend-verification-email', {
+  const response = await axios.post('http://localhost/api/email/verification-notification', {
   }, {
     withCredentials: true,
     withXSRFToken: true,

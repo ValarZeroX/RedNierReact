@@ -1,37 +1,88 @@
-import React, { useState } from 'react';
-import { Button, Paper, Title, Container, Text } from '@mantine/core';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { Container, Paper, Title, Text, Loader, Button, Stack } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 import { resendVerificationEmail } from '../../services/authService';
 
 function VerifyEmail() {
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
+  const [status, setStatus] = useState('verifying');
+  const [resendStatus, setResendStatus] = useState('');
+  const location = useLocation();
+  const { t } = useTranslation();
 
-  const handleResendEmail = async () => {
+  useEffect(() => {
+    const verifyEmail = async () => {
+      const params = new URLSearchParams(location.search);
+      const verifyUrl = params.get('verify_url');
+
+      // 使用 decodeURIComponent 將 URL 解碼回去
+    const decodedUrl = decodeURIComponent(verifyUrl);
+      if (!decodedUrl) {
+        setStatus('error');
+        return;
+      }
+
+      try {
+        const response = await axios.get(decodedUrl, {
+          headers: {
+            // Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        });
+        if (response.data.message === 'Email already verified.') {
+          setStatus('success');
+        } else {
+          setStatus('error');
+        }
+      } catch (error) {
+        setStatus('error');
+      }
+    };
+
+    verifyEmail();
+  }, [location]);
+
+  const handleResendVerification = async () => {
+    setResendStatus('sending');
     try {
       await resendVerificationEmail();
-      setMessage('驗證郵件已重新發送，請檢查您的郵箱。');
-      setError('');
-    } catch (err) {
-      console.error('重新發送驗證郵件錯誤:', err);
-      setError('重新發送驗證郵件失敗，請稍後再試。');
-      setMessage('');
+      setResendStatus('success');
+    } catch (error) {
+      console.error('Resend verification error:', error);
+      setResendStatus('error');
+    }
+  };
+
+  const renderContent = () => {
+    switch (status) {
+      case 'verifying':
+        return <Loader size="xl" />;
+      case 'success':
+        return <Text>{t('verifyEmail.success')}</Text>;
+      case 'error':
+        return (
+          <Stack>
+            <Text color="red">{t('verifyEmail.error')}</Text>
+            <Button onClick={handleResendVerification} loading={resendStatus === 'sending'}>
+              {t('verifyEmail.resend')}
+            </Button>
+            {resendStatus === 'success' && <Text color="green">{t('verifyEmail.resendSuccess')}</Text>}
+            {resendStatus === 'error' && <Text color="red">{t('verifyEmail.resendError')}</Text>}
+          </Stack>
+        );
+      default:
+        return null;
     }
   };
 
   return (
     <Container size={420} my={40}>
       <Title align="center" order={2} mb={30}>
-        驗證您的電子郵件
+        {t('verifyEmail.title')}
       </Title>
       <Paper withBorder shadow="md" p={30} radius="md">
-        <Text mb="md">
-          我們已經向您的電子郵件地址發送了一封驗證郵件。請檢查您的郵箱並點擊驗證鏈接。
-        </Text>
-        {message && <Text color="green" mb="md">{message}</Text>}
-        {error && <Text color="red" mb="md">{error}</Text>}
-        <Button onClick={handleResendEmail} fullWidth>
-          重新發送驗證郵件
-        </Button>
+        {renderContent()}
       </Paper>
     </Container>
   );

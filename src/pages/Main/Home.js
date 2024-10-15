@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
-import Header from '../../components/layout/Header';
+import Header from '../../components/layout/Header'; 
 import UserMenu from '../../components/layout/UserMenu';
 import OriginMenu from '../../components/layout/OriginMenu';
-import { AppShell } from '@mantine/core';
+import { AppShell} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { logout } from '../../services/authService'; // 確保導入 logout 函數
+
 
 function Home() {
     const [opened, { toggle }] = useDisclosure();

@@ -4,5 +4,25 @@
         "google": "繼續使用Google",
         "facebook": "繼續使用Facebook",
         "or": "或"
+    },
+    "register": {
+        "title": "註冊新帳戶",
+        "email": "電子郵件",
+        "password": "密碼",
+        "confirmPassword": "確認密碼",
+        "register": "註冊",
+        "error": "註冊失敗，請稍後再試",
+        "emailError": "此電子郵件已經被註冊過",
+        "passwordError": "密碼不匹配",
+        "passwordPlaceholder": "您的密碼",
+        "confirmPasswordPlaceholder": "再次輸入密碼"
+    },
+    "verifyEmail": {
+        "title": "驗證電子郵件",
+        "success": "電子郵件驗證成功！",
+        "error": "驗證失敗，請稍後再試或聯繫支持。",
+        "resend": "重新發送驗證郵件",
+        "resendSuccess": "驗證郵件已重新發送，請檢查您的收件箱。",
+        "resendError": "重新發送驗證郵件失敗，請稍後再試。"
     }
 }

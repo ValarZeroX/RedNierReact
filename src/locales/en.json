@@ -4,5 +4,25 @@
         "google": "Continue With Google",
         "facebook": "Continue With Facebook",
         "or": "OR"
+    },
+    "register": {
+        "title": "Register New Account",
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "register": "Register",
+        "error": "Registration failed, please try again later",
+        "emailError": "This email has already been taken",
+        "passwordError": "Passwords do not match",
+        "passwordPlaceholder": "Your password",
+        "confirmPasswordPlaceholder": "Re-enter password"
+    },
+    "verifyEmail": {
+        "title": "Verify Your Email",
+        "success": "Email verified successfully",
+        "error": "Email verification failed, please login and try again",
+        "resend": "Resend verification email",
+        "resendSuccess": "Verification email sent, please check your inbox",
+        "resendError": "Failed to resend verification email, please try again later"
     }
 }
