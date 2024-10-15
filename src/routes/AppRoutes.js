@@ -5,7 +5,6 @@ import AuthCallback from '../components/auth/AuthCallback';
 import UserRoutes from './UserRoutes';
 import Home from '../pages/Main/Home';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
-import VerifyEmail from '../pages/auth/VerifyEmail';
 
 const AppRoutes = () => {
   return (

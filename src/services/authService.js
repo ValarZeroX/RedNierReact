@@ -112,3 +112,46 @@ export const register = async (email, password) => {
   return response.data; // 返回響應數據
 };
 
+export const login = async (email, password) => {
+  try {
+    // 获取 CSRF Cookie
+    await axios.get('http://localhost/sanctum/csrf-cookie', { withCredentials: true });
+
+    // 调用后端登录接口
+    const response = await axios.post('http://localhost/api/login', {
+      email,
+      password
+    }, {
+      withCredentials: true,
+      withXSRFToken: true,
+      headers: {
+        'X-XSRF-TOKEN': getCookie('XSRF-TOKEN'),
+      }
+    });
+
+    // 如果登录成功，存储 access_token
+    if (response.data.access_token) {
+      localStorage.setItem('token', response.data.access_token);
+      // return true;
+      window.location.href = '/';
+    }
+
+    return false;
+  } catch (error) {
+    console.error('登录失败:', error);
+    throw error;
+  }
+};
+
+export const resendVerificationEmail = async () => {
+  await axios.get('http://localhost/sanctum/csrf-cookie', { withCredentials: true });
+  const response = await axios.post('/resend-verification-email', {
+  }, {
+    withCredentials: true,
+    withXSRFToken: true,
+    headers: {
+      'X-XSRF-TOKEN': getCookie('XSRF-TOKEN'),
+    }
+  });
+  return response.data;
+};

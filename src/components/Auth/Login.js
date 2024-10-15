@@ -1,7 +1,7 @@
 // import { useDisclosure } from '@mantine/hooks';
 import React from 'react';
 import { Button, Container, Title, Text, Modal, Divider, Checkbox, TextInput, PasswordInput, Paper } from '@mantine/core';
-import { loginWithGoogle, processTokenFromURL } from '../../services/authService';  // 引入 authService 中的函数
+import { loginWithGoogle, processTokenFromURL, login } from '../../services/authService';  // 引入 login 函數
 import { IconBrandGoogleFilled, IconBrandFacebookFilled } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
@@ -19,10 +19,21 @@ function Login({ opened, close }) {
         },
         validate: {
             email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-            confirmPassword: (value, values) =>
-                value !== values.password ? 'Passwords did not match' : null,
+            password: (value) => (value.length < 8 ? 'Password must be at least 8 characters' : null),
         },
     });
+
+    const handleLogin = async (values) => {
+        try {
+            await login(values.email, values.password);
+            // 登入成功後的處理，例如關閉 Modal 或重定向
+            close();
+        } catch (error) {
+            // 處理登入錯誤，例如顯示錯誤消息
+            console.error('Login failed:', error);
+            // 這裡可以添加錯誤處理邏輯，比如設置表單錯誤狀態
+        }
+    };
 
     const handleRegisterClick = (e) => {
         close(); // 關閉 Modal
@@ -38,7 +49,7 @@ function Login({ opened, close }) {
                     <Text align="center" size="sm" style={{ marginBottom: 20 }}>
                         繼續操作即表示您同意我們的使用者協議,並確認您了解隱私權政策。
                     </Text>
-                    <form onSubmit={form.onSubmit((values) => console.log(values))}>
+                    <form onSubmit={form.onSubmit(handleLogin)}>
                         <TextInput
                             withAsterisk
                             label="電子信箱"
@@ -60,7 +71,7 @@ function Login({ opened, close }) {
                             {...form.getInputProps('termsOfService', { type: 'checkbox' })}
                             style={{ marginBottom: 10 }}
                         />
-                        <Button fullWidth variant="default">登入</Button>
+                        <Button fullWidth type="submit" variant="default">登入</Button>
                     </form>
                     <Divider my="md" label={t('login.or')} labelPosition="center" />
                     <Button justify="space-between" fullWidth leftSection={<IconBrandGoogleFilled size={14} />} variant="default" onClick={loginWithGoogle} style={{ marginBottom: 10 }} rightSection={<span />}>

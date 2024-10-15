@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextInput, PasswordInput, Button, Paper, Title, Container, Box, Text } from '@mantine/core';
-import { register } from '../services/authService';
+import { register } from '../../services/authService';
 import { useNavigate } from 'react-router-dom';
 
 function Register() {
@@ -23,15 +23,8 @@ function Register() {
       const response = await register(email, password);
       console.log('註冊成功:', response);
       
-      // 檢查響應中是否包含 access_token
-      if (response.access_token) {
-        localStorage.setItem('token', response.access_token);
-        navigate('/dashboard');
-      } else {
-        // 如果沒有 token，可能需要額外的處理
-        console.log('註冊成功，但未收到 token');
-        navigate('/login'); // 或者導航到登錄頁面
-      }
+      // 註冊成功後，直接導航到驗證郵件頁面
+      navigate('/verify-email');
     } catch (err) {
       console.error('註冊錯誤:', err);
       if (err.response && err.response.data && err.response.data.message) {
