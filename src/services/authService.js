@@ -108,6 +108,7 @@ export const register = async (email, password) => {
     withXSRFToken: true,
     headers: {
       'X-XSRF-TOKEN': getCookie('XSRF-TOKEN'),
+      'Accept-Language': 'zhHant',
     }
   });
   return response.data; // 返回響應數據
@@ -127,6 +128,7 @@ export const login = async (email, password) => {
       withXSRFToken: true,
       headers: {
         'X-XSRF-TOKEN': getCookie('XSRF-TOKEN'),
+        'Accept-Language': 'zhHant',
       }
     });
 
@@ -139,7 +141,8 @@ export const login = async (email, password) => {
 
     return false;
   } catch (error) {
-    console.error('登录失败:', error);
+    // console.error('登录失败:', error);
+    // return response.data;
     throw error;
   }
 };

@@ -5,6 +5,9 @@ import Register from '../pages/auth/Register';
 import Login from '../components/auth/Login';
 import RegisterSuccess from '../pages/auth/RegisterSuccess';
 import VerifyEmail from '../pages/auth/VerifyEmail';
+import NotFoundTitle from '../pages/errors/NotFoundTitle';
+import AuthCallback from '../components/auth/AuthCallback';
+
 const MainRoutes = () => {
   return (
     <Routes>
@@ -12,6 +15,11 @@ const MainRoutes = () => {
         <Route path="register" element={<Register />} />
         <Route path="register-success" element={<RegisterSuccess />} />
         <Route path="verify-email" element={<VerifyEmail />} />
+        
+        {/* 單獨的路由 */}
+        <Route path="/auth/callback" element={<AuthCallback />} />
+        {/* 404 路由，確保放在所有路由的最末尾 */}
+        <Route path="*" element={<NotFoundTitle />} />  
     </Routes>
   );
 };

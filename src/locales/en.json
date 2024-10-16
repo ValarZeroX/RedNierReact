@@ -3,7 +3,9 @@
         "title": "Log In",
         "google": "Continue With Google",
         "facebook": "Continue With Facebook",
-        "or": "OR"
+        "or": "OR",
+        "invalidCredentials": "account or password error",
+        "error": "Login failed, please try again later"
     },
     "register": {
         "title": "Register New Account",
@@ -12,8 +14,6 @@
         "confirmPassword": "Confirm Password",
         "register": "Register",
         "error": "Registration failed, please try again later",
-        "emailError": "This email has already been taken",
-        "passwordError": "Passwords do not match",
         "passwordPlaceholder": "Your password",
         "confirmPasswordPlaceholder": "Re-enter password"
     },
@@ -24,5 +24,11 @@
         "resend": "Resend verification email",
         "resendSuccess": "Verification email sent, please check your inbox",
         "resendError": "Failed to resend verification email, please try again later"
+    },
+    "notFound": {
+        "title": "Page Not Found",
+        "description": "You have found a secret place.",
+        "error": "Unfortunately, this is only a 404 page. You may have mistyped the address, or the page has been moved to another URL.",
+        "button": "Take me back to home page"
     }
 }

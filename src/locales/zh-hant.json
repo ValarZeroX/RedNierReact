@@ -3,7 +3,9 @@
         "title": "登入",
         "google": "繼續使用Google",
         "facebook": "繼續使用Facebook",
-        "or": "或"
+        "or": "或",
+        "invalidCredentials": "帳號密碼錯誤",
+        "error": "登入失敗，請稍後再試"
     },
     "register": {
         "title": "註冊新帳戶",
@@ -12,8 +14,6 @@
         "confirmPassword": "確認密碼",
         "register": "註冊",
         "error": "註冊失敗，請稍後再試",
-        "emailError": "此電子郵件已經被註冊過",
-        "passwordError": "密碼不匹配",
         "passwordPlaceholder": "您的密碼",
         "confirmPasswordPlaceholder": "再次輸入密碼"
     },
@@ -24,5 +24,11 @@
         "resend": "重新發送驗證郵件",
         "resendSuccess": "驗證郵件已重新發送，請檢查您的收件箱。",
         "resendError": "重新發送驗證郵件失敗，請稍後再試。"
+    },
+    "notFound": {
+        "title": "找不到頁面",
+        "description": "您找到了一個秘密的地方。",
+        "error": "很抱歉，這只是一個404頁面。您可能輸入了錯誤的地址，或者該頁面已移動到另一個URL。",
+        "button": "返回主頁"
     }
 }

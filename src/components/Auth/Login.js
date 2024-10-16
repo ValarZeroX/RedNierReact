@@ -1,5 +1,5 @@
 // import { useDisclosure } from '@mantine/hooks';
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Container, Title, Text, Modal, Divider, Checkbox, TextInput, PasswordInput, Paper } from '@mantine/core';
 import { loginWithGoogle, processTokenFromURL, login } from '../../services/authService';  // 引入 login 函數
 import { IconBrandGoogleFilled, IconBrandFacebookFilled } from '@tabler/icons-react';
@@ -8,6 +8,7 @@ import { useForm } from '@mantine/form';
 import { Link } from 'react-router-dom';
 
 function Login({ opened, close }) {
+    const [error, setError] = useState('');
     const { t } = useTranslation();
 
     const form = useForm({
@@ -28,9 +29,14 @@ function Login({ opened, close }) {
             await login(values.email, values.password);
             // 登入成功後的處理，例如關閉 Modal 或重定向
             close();
-        } catch (error) {
+        } catch (err) {
+            if (err.response && err.response.status === 401) {
+                setError(t(err.response.data.message));
+              } else {
+                setError(t('login.error'));
+              }
             // 處理登入錯誤，例如顯示錯誤消息
-            console.error('Login failed:', error);
+            // console.error('Login failed:', error);
             // 這裡可以添加錯誤處理邏輯，比如設置表單錯誤狀態
         }
     };
@@ -49,6 +55,11 @@ function Login({ opened, close }) {
                     <Text align="center" size="sm" style={{ marginBottom: 20 }}>
                         繼續操作即表示您同意我們的使用者協議,並確認您了解隱私權政策。
                     </Text>
+                    {error && (  // 顯示錯誤訊息
+                        <Text color="red" size="sm" align="center" style={{ marginBottom: 10 }}>
+                            {error}
+                        </Text>
+                    )}
                     <form onSubmit={form.onSubmit(handleLogin)}>
                         <TextInput
                             withAsterisk
@@ -85,7 +96,6 @@ function Login({ opened, close }) {
                     </Text>
                 </Container>
             </Modal>
-            {/* <Button onClick={open}>Open centered Modal</Button> */}
         </>
     );
 }

@@ -27,8 +27,9 @@ function Header({ opened, toggle, toggleUserMenu }) {
   const [loginModalOpened, { open: openLoginModal, close: closeLoginModal }] = useDisclosure(false);
   const { i18n, t } = useTranslation();
   const toggleLanguage = () => {
-    const newLang = i18n.language === 'en' ? 'zhtw' : 'en';
+    const newLang = i18n.language === 'en' ? 'zhHant' : 'en';
     i18n.changeLanguage(newLang);
+    localStorage.setItem('language', newLang);
   };
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 

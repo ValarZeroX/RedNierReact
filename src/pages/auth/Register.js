@@ -30,11 +30,10 @@ function Register() {
       navigate('/register-success');
     } catch (err) {
       if (err.response && err.response.data && err.response.data.message) {
-        if(err.response.data.message === 'The email has already been taken.') {
-          setError(t('register.emailError'));
-        } else {
-          setError(err.response.data.message);
-        }
+        const errors = err.response.data.errors;
+        const firstErrorField = Object.keys(errors)[0]; // 取第一個字段名
+        const firstErrorMessage = errors[firstErrorField][0]; // 取第一個錯誤訊息
+    setError(firstErrorMessage); // 設置錯誤訊息
       } else {
         setError(t('register.error'));
       }

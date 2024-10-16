@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import en from './locales/en.json';
-import zhtw from './locales/zh-tw.json';
+import zhHant from './locales/zh-hant.json';
 
 // 初始化 i18n
 i18n.use(initReactI18next).init({
@@ -9,8 +9,8 @@ i18n.use(initReactI18next).init({
     en: {
       translation: en
     },
-    zhtw: {
-      translation: zhtw
+    zhHant: {
+      translation: zhHant
     }
   },
   lng: 'en',  // 默认语言
