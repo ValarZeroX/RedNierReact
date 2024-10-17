@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { Container, Paper, Title, Text, Loader, Button, Stack } from '@mantine/core';
+import { Container, Paper, Title, Text, Loader, Button, Stack, Center } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { resendVerificationEmail } from '../../services/authService';
 
@@ -57,18 +57,22 @@ function VerifyEmail() {
   const renderContent = () => {
     switch (status) {
       case 'verifying':
-        return <Loader size="xl" />;
+        return (
+        <Center>
+            <Loader size="xl" />
+        </Center>
+        );
       case 'success':
         return <Text>{t('verifyEmail.success')}</Text>;
       case 'error':
         return (
           <Stack>
             <Text color="red">{t('verifyEmail.error')}</Text>
+            {resendStatus === 'success' && <Text color="green">{t('verifyEmail.resendSuccess')}</Text>}
+            {resendStatus === 'error' && <Text color="red">{t('verifyEmail.resendError')}</Text>}
             <Button onClick={handleResendVerification} loading={resendStatus === 'sending'}>
               {t('verifyEmail.resend')}
             </Button>
-            {resendStatus === 'success' && <Text color="green">{t('verifyEmail.resendSuccess')}</Text>}
-            {resendStatus === 'error' && <Text color="red">{t('verifyEmail.resendError')}</Text>}
           </Stack>
         );
       default:

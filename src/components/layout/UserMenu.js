@@ -19,7 +19,7 @@ function UserMenu({ onLogout, onNavigate }) {
         <NavLink
           label="設置"
           leftSection={<IconSettings size="1rem" stroke={1.5} />}
-          onClick={() => onNavigate('/user/settings')}
+          onClick={() => onNavigate('/user/preferences')}
         />
       </nav>
       <NavLink

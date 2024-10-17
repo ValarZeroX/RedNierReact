@@ -69,6 +69,8 @@ export const fetchUserData = async (token) => {
 
     // 存储用户信息到 localStorage
     localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('language', response.data.language);
+    localStorage.setItem('mantine-color-scheme-value', response.data.theme);
 
     return user;  // 返回用户数据
   } catch (error) {
@@ -86,7 +88,7 @@ export const fetchUserData = async (token) => {
 
 export const isAuthenticated = async () => {
   const token = localStorage.getItem('token');
-  console.log('Checking authentication, token exists:', !!token); // 添加这行
+  // console.log('Checking authentication, token exists:', !!token); // 添加这行
   if (!token) {
     return false;
   }
@@ -135,8 +137,11 @@ export const login = async (email, password) => {
     // 如果登录成功，存储 access_token
     if (response.data.access_token) {
       localStorage.setItem('token', response.data.access_token);
+      const user = await fetchUserData(response.data.access_token);
       // return true;
-      window.location.href = '/';
+      if (user) {
+        window.location.href = '/'; // 成功获取用户信息后跳转到首页
+      }
     }
 
     return false;

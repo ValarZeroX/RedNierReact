@@ -30,5 +30,13 @@
         "description": "You have found a secret place.",
         "error": "Unfortunately, this is only a 404 page. You may have mistyped the address, or the page has been moved to another URL.",
         "button": "Take me back to home page"
+    },
+    "preferences": {
+        "title": "Preferences",
+        "theme": "Theme",
+        "themeDescription": "Choose your preferred theme.",
+        "language": "Language",
+        "languageDescription": "Choose your preferred language.",
+        "saveButton": "Save Settings"
     }
 }

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { isAuthenticated, logout } from '../../services/authService';
-import { Autocomplete, Group, Burger, rem, ActionIcon, useMantineColorScheme, Button } from '@mantine/core';
+import { Autocomplete, Group, Burger, rem, ActionIcon, useMantineColorScheme, Button, Avatar, Menu } from '@mantine/core';
 // import { useColorScheme  } from '@mantine/hooks';
 import { IconSearch } from '@tabler/icons-react';
 // import { MantineLogo } from '@mantinex/mantine-logo';
 import classes from '../../assets/topbar.module.css';
-import { IconBrandMantine, IconBrightnessDown, IconMoon, IconLogin, IconLanguage, IconLogout } from '@tabler/icons-react';
+import { IconBrandMantine, IconBrightnessDown, IconMoon, IconLogin, IconLanguage, IconLogout, IconSettings } from '@tabler/icons-react';
 import Login from '../auth/Login';
 import { useDisclosure } from '@mantine/hooks';
 import { useTranslation } from 'react-i18next';
@@ -32,18 +32,29 @@ function Header({ opened, toggle, toggleUserMenu }) {
     localStorage.setItem('language', newLang);
   };
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState('');
+  // 從 localStorage 中獲取 userName
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      setUserName(user.name);  // 設定 userName 的狀態
+    }
+  }, []);
 
+  // 檢查登入狀態
   useEffect(() => {
     const checkAuthStatus = async () => {
       const authStatus = await isAuthenticated();
-      console.log('Authentication status:', authStatus); // 添加这行
+      // console.log('Authentication status:', authStatus); // 添加这行
       setIsLoggedIn(authStatus);
     };
     checkAuthStatus();
   }, []);
 
+
   useEffect(() => {
-    console.log('isLoggedIn state updated:', isLoggedIn); // 添加这行
+    // console.log('isLoggedIn state updated:', isLoggedIn); // 添加这行
   }, [isLoggedIn]);
 
   const handleLogout = async () => {
@@ -51,7 +62,7 @@ function Header({ opened, toggle, toggleUserMenu }) {
       await logout();
       setIsLoggedIn(false);
     } catch (error) {
-      console.error('登出时发生错误:', error);
+      // console.error('登出时发生错误:', error);
       // 即使发生错误，也将用户视为已登出
       setIsLoggedIn(false);
     }
@@ -98,9 +109,23 @@ function Header({ opened, toggle, toggleUserMenu }) {
             // <ActionIcon variant="filled" size="lg" onClick={handleLogout} color="red" aria-label="Logout">
             //   <IconLogout />
             // </ActionIcon>
-              <ActionIcon variant="default" size="lg" onClick={toggleUserMenu} aria-label="Toggle User/Origin Menu">
-              <IconLayoutDashboard style={{ width: '80%', height: '80%' }} stroke={1.5} />
-            </ActionIcon>
+            //   <ActionIcon variant="default" size="lg" onClick={toggleUserMenu} aria-label="Toggle User/Origin Menu">
+            //   <IconLayoutDashboard style={{ width: '80%', height: '80%' }} stroke={1.5} />
+            // </ActionIcon>
+            <Menu transitionProps={{ transition: 'rotate-right', duration: 150 }}>
+              <Menu.Target>
+                <Avatar radius="xl" style={{ cursor: 'pointer' }} name={userName} key={userName} color="initials" />
+              </Menu.Target>
+
+              <Menu.Dropdown>
+                <Menu.Item leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />} onClick={toggleUserMenu}>
+                  帳號設定
+                </Menu.Item>
+                <Menu.Item leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />} color="red" onClick={handleLogout}>
+                  登出
+                </Menu.Item>
+              </Menu.Dropdown>
+          </Menu>
           ) : (
             <ActionIcon variant="default" size="lg" onClick={openLoginModal} aria-label="Login">
               <IconLogin />
