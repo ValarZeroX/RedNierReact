@@ -6,10 +6,13 @@ import { IconBrandGoogleFilled, IconBrandFacebookFilled } from '@tabler/icons-re
 import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../store/userSlice';
 
 function Login({ opened, close }) {
     const [error, setError] = useState('');
     const { t } = useTranslation();
+    const dispatch = useDispatch();
 
     const form = useForm({
         mode: 'uncontrolled',
@@ -26,18 +29,16 @@ function Login({ opened, close }) {
 
     const handleLogin = async (values) => {
         try {
-            await login(values.email, values.password);
-            // 登入成功後的處理，例如關閉 Modal 或重定向
-            close();
-        } catch (err) {
-            if (err.response && err.response.status === 401) {
-                setError(t(err.response.data.message));
-              } else {
-                setError(t('login.error'));
-              }
-            // 處理登入錯誤，例如顯示錯誤消息
-            // console.error('Login failed:', error);
-            // 這裡可以添加錯誤處理邏輯，比如設置表單錯誤狀態
+            const user = await login(values.email, values.password);
+            console.log('user:', user);
+            if (user) {
+                dispatch(setUser(user));
+                close();
+                window.location.href = '/';
+            }
+        } catch (error) {
+            console.error('Login failed:', error);
+            // 處理登錄錯誤...
         }
     };
 

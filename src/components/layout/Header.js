@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { isAuthenticated, logout } from '../../services/authService';
+import { clearUser } from '../../store/userSlice';
 import { Autocomplete, Group, Burger, rem, ActionIcon, useMantineColorScheme, Button, Avatar, Menu } from '@mantine/core';
 // import { useColorScheme  } from '@mantine/hooks';
 import { IconSearch } from '@tabler/icons-react';
@@ -12,7 +14,6 @@ import { useDisclosure } from '@mantine/hooks';
 import { useTranslation } from 'react-i18next';
 // 新增這個 import
 import { IconLayoutDashboard } from '@tabler/icons-react';
-
 
 const links = [
   { link: '/about', label: 'Features' },
@@ -26,46 +27,22 @@ function Header({ opened, toggle, toggleUserMenu }) {
   const Icon = colorScheme === 'dark' ? IconBrightnessDown : IconMoon;
   const [loginModalOpened, { open: openLoginModal, close: closeLoginModal }] = useDisclosure(false);
   const { i18n, t } = useTranslation();
+  const dispatch = useDispatch();
+  const { user, isLoggedIn } = useSelector((state) => state.user);
+
   const toggleLanguage = () => {
     const newLang = i18n.language === 'en' ? 'zhHant' : 'en';
     i18n.changeLanguage(newLang);
     localStorage.setItem('language', newLang);
   };
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState('');
-  // 從 localStorage 中獲取 userName
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      const user = JSON.parse(storedUser);
-    
-      setUserName(user.name);  // 設定 userName 的狀態
-    }
-  }, []);
-
-  // 檢查登入狀態
-  useEffect(() => {
-    const checkAuthStatus = async () => {
-      const authStatus = await isAuthenticated();
-      // console.log('Authentication status:', authStatus); // 添加这行
-      setIsLoggedIn(authStatus);
-    };
-    checkAuthStatus();
-  }, []);
-
-
-  useEffect(() => {
-    // console.log('isLoggedIn state updated:', isLoggedIn); // 添加这行
-  }, [isLoggedIn]);
 
   const handleLogout = async () => {
     try {
       await logout();
-      setIsLoggedIn(false);
+      dispatch(clearUser());
     } catch (error) {
-      // console.error('登出时发生错误:', error);
-      // 即使发生错误，也将用户视为已登出
-      setIsLoggedIn(false);
+      console.error('登出时发生错误:', error);
+      dispatch(clearUser());
     }
   };
 
@@ -82,7 +59,7 @@ function Header({ opened, toggle, toggleUserMenu }) {
 
   return (
     <div className={classes.header}>
-      {console.log('Rendering Header, isLoggedIn:', isLoggedIn)} {/* 添加这行 */}
+      {console.log('Rendering Header, isLoggedIn:', isLoggedIn)}
       <div className={classes.inner}>
         <Group>
           <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="sm" />
@@ -107,15 +84,9 @@ function Header({ opened, toggle, toggleUserMenu }) {
             visibleFrom="xs"
           />
            {isLoggedIn ? (
-            // <ActionIcon variant="filled" size="lg" onClick={handleLogout} color="red" aria-label="Logout">
-            //   <IconLogout />
-            // </ActionIcon>
-            //   <ActionIcon variant="default" size="lg" onClick={toggleUserMenu} aria-label="Toggle User/Origin Menu">
-            //   <IconLayoutDashboard style={{ width: '80%', height: '80%' }} stroke={1.5} />
-            // </ActionIcon>
             <Menu transitionProps={{ transition: 'rotate-right', duration: 150 }}>
               <Menu.Target>
-                <Avatar radius="xl" style={{ cursor: 'pointer' }} name={userName} key={userName} color="initials" />
+                <Avatar radius="xl" style={{ cursor: 'pointer' }} name={user?.name} key={user?.name} color="initials" />
               </Menu.Target>
 
               <Menu.Dropdown>
@@ -126,7 +97,7 @@ function Header({ opened, toggle, toggleUserMenu }) {
                   登出
                 </Menu.Item>
               </Menu.Dropdown>
-          </Menu>
+            </Menu>
           ) : (
             <ActionIcon variant="default" size="lg" onClick={openLoginModal} aria-label="Login">
               <IconLogin />
@@ -141,7 +112,6 @@ function Header({ opened, toggle, toggleUserMenu }) {
             size="lg"
             onClick={() => toggleColorScheme()}
           >
-            {/* 根据当前主题切换图标 */}
             <Icon style={{ width: '80%', height: '80%' }} stroke={1.5} />
           </ActionIcon>
         </Group>
@@ -151,4 +121,4 @@ function Header({ opened, toggle, toggleUserMenu }) {
   );
 }
 
-export default Header; 
+export default Header;

@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { getCookie } from '../utils/cookie'; 
+import { store } from '../store';
+import { setUser, clearUser } from '../store/userSlice';
 
 // authService.js
 export const loginWithGoogle = async () => {
@@ -27,25 +29,21 @@ export const processTokenFromURL = () => {
 export const logout = async () => {
   try {
     await axios.get('http://localhost/sanctum/csrf-cookie', { withCredentials: true });
-    // 调用后端登出接口
     await axios.post('http://localhost/api/logout', {}, {
       withCredentials: true,
       withXSRFToken: true,
       headers: {
-        // 'Authorization': `Bearer ${localStorage.getItem('token')}`
         'X-XSRF-TOKEN': getCookie('XSRF-TOKEN'),
       }
     });
 
-    // 清除本地存储中的令牌和用户信息
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-
-    // 可能还需要重定向到登录页面或首页
+    store.dispatch(clearUser());
     window.location.href = '/';
   } catch (error) {
     console.error('登出失败:', error);
-    // 即使后端请求失败，也清除本地存储
+    store.dispatch(clearUser());
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     window.location.href = '/';
@@ -53,7 +51,7 @@ export const logout = async () => {
 };
 
 // 获取用户数据函数
-export const fetchUserData = async (token) => {
+export const fetchUserData = async () => {
   try {
     const response = await axios.get('http://localhost/api/user', {
       withCredentials: true,
@@ -84,15 +82,18 @@ export const fetchUserData = async (token) => {
 
 export const isAuthenticated = async () => {
   const token = localStorage.getItem('token');
-  // console.log('Checking authentication, token exists:', !!token); // 添加这行
   if (!token) {
     return false;
   }
   
-  // 这里可以添加向后端验证令牌有效性的逻辑
-  // 例如，发送一个请求到后端的验证端点
-  
-  return true; // 如果令牌有效
+  try {
+    const user = await fetchUserData();
+    store.dispatch(setUser(user));
+    return true;
+  } catch (error) {
+    console.error('Error verifying authentication:', error);
+    return false;
+  }
 };
 
 export const register = async (email, password) => {
@@ -114,10 +115,8 @@ export const register = async (email, password) => {
 
 export const login = async (email, password) => {
   try {
-    // 获取 CSRF Cookie
     await axios.get('http://localhost/sanctum/csrf-cookie', { withCredentials: true });
 
-    // 调用后端登录接口
     const response = await axios.post('http://localhost/api/login', {
       email,
       password
@@ -130,20 +129,16 @@ export const login = async (email, password) => {
       }
     });
 
-    // 如果登录成功，存储 access_token
     if (response.data.access_token) {
       localStorage.setItem('token', response.data.access_token);
-      const user = await fetchUserData(response.data.access_token);
-      // return true;
-      if (user) {
-        window.location.href = '/'; // 成功获取用户信息后跳转到首页
-      }
+      const userData = await fetchUserData();
+      store.dispatch(setUser(userData));
+      return userData;
     }
 
-    return false;
+    return null;
   } catch (error) {
-    // console.error('登录失败:', error);
-    // return response.data;
+    console.error('登录失败:', error);
     throw error;
   }
 };

@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { MantineProvider } from '@mantine/core'; // 引入 MantineProvider
+import { MantineProvider } from '@mantine/core';
+import { Provider } from 'react-redux';
+import { store } from './store'; // 引入你的 Redux store
 import '@mantine/core/styles.css';
-// import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import i18n from './i18n';
@@ -16,13 +17,12 @@ if (savedLanguage) {
 
 root.render(
   <React.StrictMode>
-    <MantineProvider withGlobalStyles withNormalizeCSS defaultColorScheme="dark">
-      <App />
-    </MantineProvider>
+    <Provider store={store}>
+      <MantineProvider withGlobalStyles withNormalizeCSS defaultColorScheme="dark">
+        <App />
+      </MantineProvider>
+    </Provider>
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

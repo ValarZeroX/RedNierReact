@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { isAuthenticated } from '../../services/authService';
+import { Center, Loader } from '@mantine/core';
 
 const ProtectedRoute = () => {
   const [isAuth, setIsAuth] = useState(null);
@@ -18,7 +19,11 @@ const ProtectedRoute = () => {
   console.log('ProtectedRoute: Current location:', location.pathname);
 
   if (isAuth === null) {
-    return <div>Loading...</div>; // 或者其他加載指示器
+    return (
+      <Center style={{ width: '100vw', height: '100vh' }}>
+        <Loader size="xl" />
+      </Center>
+    );
   }
 
   if (!isAuth) {
