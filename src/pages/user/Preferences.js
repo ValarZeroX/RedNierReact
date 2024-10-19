@@ -93,7 +93,7 @@ function Preferences() {
             </Grid.Col>
           </Grid>
           <Button
-            leftIcon={<IconDeviceFloppy size="1rem" />}
+            leftSection={<IconDeviceFloppy size="1rem" />}
             onClick={handleSaveSettings}
             style={{ alignSelf: 'flex-end' }}
           >

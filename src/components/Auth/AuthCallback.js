@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { fetchUserData } from '../../services/authService';
+import { useMantineColorScheme } from '@mantine/core';
 
 function AuthCallback() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { setColorScheme } = useMantineColorScheme();
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -17,7 +19,7 @@ function AuthCallback() {
           
           // 調用 fetchUserData 函數來獲取用戶數據
           const user = await fetchUserData(token);
-          
+          setColorScheme(user.theme);
           if (user) {
             // 獲取用戶數據成功，導航到首頁
             navigate('/');

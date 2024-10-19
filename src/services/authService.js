@@ -56,33 +56,29 @@ export const logout = async () => {
 export const fetchUserData = async (token) => {
   try {
     const response = await axios.get('http://localhost/api/user', {
-      headers: {
-        // Authorization: `Bearer ${token}`,
-      },
       withCredentials: true,
     });
 
     const user = {
       id: response.data.id,
       name: response.data.name,
+      language: response.data.language,
+      theme: response.data.theme,
     };
 
-    // 存储用户信息到 localStorage
     localStorage.setItem('user', JSON.stringify(user));
     localStorage.setItem('language', response.data.language);
     localStorage.setItem('mantine-color-scheme-value', response.data.theme);
 
-    return user;  // 返回用户数据
+    return user;
   } catch (error) {
     console.error('Error fetching user data:', error);
     if (error.response && (error.response.status === 401 || error.response.status === 409)) {
-      console.error('error.respons:', error.respons);
-      // 如果认证失败，清空 localStorage 并跳转到首页
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       window.location.href = '/login';
     }
-    // throw error;  // 将错误抛出，以便在组件中处理
+    throw error;
   }
 };
 

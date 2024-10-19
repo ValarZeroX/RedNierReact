@@ -38,6 +38,7 @@ function Header({ opened, toggle, toggleUserMenu }) {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       const user = JSON.parse(storedUser);
+    
       setUserName(user.name);  // 設定 userName 的狀態
     }
   }, []);

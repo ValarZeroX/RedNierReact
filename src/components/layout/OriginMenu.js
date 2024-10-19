@@ -1,6 +1,6 @@
 import React from 'react';
-import { NavLink } from '@mantine/core';
-import { IconHome, IconBook, IconMessage } from '@tabler/icons-react';
+import { NavLink, Divider } from '@mantine/core';
+import { IconHome, IconBook, IconMessage, IconGauge } from '@tabler/icons-react';
 
 function OriginMenu({ onNavigate }) {
   return (
@@ -15,11 +15,26 @@ function OriginMenu({ onNavigate }) {
         leftSection={<IconBook size="1rem" stroke={1.5} />}
         onClick={() => onNavigate('/courses')}
       />
+      <Divider my="xs" label="討論區" labelPosition="left" />
       <NavLink
         label="討論區"
         leftSection={<IconMessage size="1rem" stroke={1.5} />}
         onClick={() => onNavigate('/forum')}
       />
+      <NavLink
+        href="#required-for-focus"
+        label="First parent link"
+        leftSection={<IconGauge size="1rem" stroke={1.5} />}
+        childrenOffset={28}
+      >
+        <NavLink href="#required-for-focus" label="First child link" />
+        <NavLink label="Second child link" href="#required-for-focus" />
+        <NavLink label="Nested parent link" childrenOffset={28} href="#required-for-focus">
+          <NavLink label="First child link" href="#required-for-focus" />
+          <NavLink label="Second child link" href="#required-for-focus" />
+          <NavLink label="Third child link" href="#required-for-focus" />
+        </NavLink>
+      </NavLink>
     </nav>
   );
 }
