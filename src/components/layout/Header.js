@@ -59,7 +59,6 @@ function Header({ opened, toggle, toggleUserMenu }) {
 
   return (
     <div className={classes.header}>
-      {console.log('Rendering Header, isLoggedIn:', isLoggedIn)}
       <div className={classes.inner}>
         <Group>
           <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="sm" />

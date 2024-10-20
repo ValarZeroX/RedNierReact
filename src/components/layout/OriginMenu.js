@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink, Divider } from '@mantine/core';
-import { IconHome, IconBook, IconMessage, IconGauge } from '@tabler/icons-react';
+import { IconHome, IconFlame, IconMessage, IconGauge } from '@tabler/icons-react';
+import CategoryMenu from '../category/CategoryMenu';
 
 function OriginMenu({ onNavigate }) {
   return (
@@ -11,17 +12,13 @@ function OriginMenu({ onNavigate }) {
         onClick={() => onNavigate('/')}
       />
       <NavLink
-        label="課程"
-        leftSection={<IconBook size="1rem" stroke={1.5} />}
+        label="熱門"
+        leftSection={<IconFlame size="1rem" stroke={1.5} />}
         onClick={() => onNavigate('/courses')}
       />
       <Divider my="xs" label="討論區" labelPosition="left" />
-      <NavLink
-        label="討論區"
-        leftSection={<IconMessage size="1rem" stroke={1.5} />}
-        onClick={() => onNavigate('/forum')}
-      />
-      <NavLink
+      <CategoryMenu />
+      {/* <NavLink
         href="#required-for-focus"
         label="First parent link"
         leftSection={<IconGauge size="1rem" stroke={1.5} />}
@@ -34,7 +31,7 @@ function OriginMenu({ onNavigate }) {
           <NavLink label="Second child link" href="#required-for-focus" />
           <NavLink label="Third child link" href="#required-for-focus" />
         </NavLink>
-      </NavLink>
+      </NavLink> */}
     </nav>
   );
 }

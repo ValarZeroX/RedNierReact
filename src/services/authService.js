@@ -74,7 +74,7 @@ export const fetchUserData = async () => {
     if (error.response && (error.response.status === 401 || error.response.status === 409)) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      window.location.href = '/login';
+      window.location.href = '/';
     }
     throw error;
   }
@@ -92,6 +92,11 @@ export const isAuthenticated = async () => {
     return true;
   } catch (error) {
     console.error('Error verifying authentication:', error);
+    // 如果是 401 或 403 錯誤，清除本地存儲的 token
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+      localStorage.removeItem('token');
+      store.dispatch(clearUser());
+    }
     return false;
   }
 };
