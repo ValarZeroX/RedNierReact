@@ -37,9 +37,9 @@ function CategoryMenu() {
             <NavLink
               key={subCategory.id}
               component={Link}
-              to={`/subcategory/${subCategory.id}`}
+              to={`/communities/${subCategory.id}`}
               label={subCategory.name}
-              active={location.pathname === `/subcategory/${subCategory.id}`}
+              active={location.pathname === `/communities/${subCategory.id}`}
             />
           ))}
         </NavLink>
