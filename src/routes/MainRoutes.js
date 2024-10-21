@@ -8,6 +8,7 @@ import VerifyEmail from '../pages/auth/VerifyEmail';
 import NotFoundTitle from '../pages/errors/NotFoundTitle';
 import AuthCallback from '../components/auth/AuthCallback';
 import CommunityList from '../pages/CommunityList';
+import CreateCommunity from '../pages/CreateCommunity';
 
 const MainRoutes = () => {
   return (
@@ -17,7 +18,7 @@ const MainRoutes = () => {
         <Route path="register-success" element={<RegisterSuccess />} />
         <Route path="verify-email" element={<VerifyEmail />} />
         <Route path="/communities/:subCategoryId" element={<CommunityList />} />
-
+        <Route path="/create-community" element={<CreateCommunity />} />
         {/* 單獨的路由 */}
         <Route path="/auth/callback" element={<AuthCallback />} />
         {/* 404 路由，確保放在所有路由的最末尾 */}

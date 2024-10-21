@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, Divider } from '@mantine/core';
-import { IconHome, IconFlame, IconMessage, IconGauge } from '@tabler/icons-react';
+import { IconHome, IconFlame, IconMessage, IconPlus } from '@tabler/icons-react';
 import CategoryMenu from '../category/CategoryMenu';
 
 function OriginMenu({ onNavigate }) {
@@ -17,7 +17,13 @@ function OriginMenu({ onNavigate }) {
         onClick={() => onNavigate('/courses')}
       />
       <Divider my="xs" label="討論區" labelPosition="left" />
+      <NavLink
+        label="建立社群"
+        leftSection={<IconPlus size="1rem" stroke={1.5} />}
+        onClick={() => onNavigate('/create-community')}
+      />
       <CategoryMenu />
+      <Divider my="xs" label="部落格" labelPosition="left" />
     </nav>
   );
 }

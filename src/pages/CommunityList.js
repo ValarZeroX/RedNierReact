@@ -3,24 +3,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchCommunities } from '../store/communitySlice';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { Container, Title, Card, Text, Group, Badge, Loader, Stack, Center, Tooltip, Flex } from '@mantine/core';
 
 const CommunityList = () => {
   const dispatch = useDispatch();
   const { subCategoryId } = useParams();
-  const communityState = useSelector((state) => state.community);
+  const { communities, currentPage, totalPages, loading, error } = useSelector((state) => state.community);
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     if (subCategoryId) {
       dispatch(fetchCommunities({ subCategoryId, page: 1 }));
+      setHasMore(true);
     }
   }, [dispatch, subCategoryId]);
-
-  if (!communityState) {
-    return <div>Loading...</div>;
-  }
-
-  const { communities, currentPage, totalPages, loading, error } = communityState;
 
   const loadMoreCommunities = () => {
     if (currentPage < totalPages) {
@@ -31,32 +27,54 @@ const CommunityList = () => {
   };
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <Container><Text color="red">Error: {error}</Text></Container>;
   }
 
   return (
-    <div>
-      <h1>Communities</h1>
+    <Container size="lg">
+      <Title order={2} mb="md">社群</Title>
       {loading && communities.length === 0 ? (
-        <div>Loading...</div>
+        <Center>
+            <Loader size="xl" />
+        </Center>
+      ) : communities.length === 0 ? (
+        <Text size="lg" color="dimmed">暫無社群</Text>
       ) : (
         <InfiniteScroll
           dataLength={communities.length}
           next={loadMoreCommunities}
           hasMore={hasMore}
-          loader={<h4>Loading...</h4>}
-          endMessage={<p>No more communities to load.</p>}
+          loader={<Center><Loader size="md" my="md" /></Center>}
+          endMessage={<Center><Text ta="center" mt="md">No more communities to load.</Text></Center>}
         >
-          {communities.map((community) => (
-            <div key={community.id}>
-              <h2>{community.name}</h2>
-              <p>Status: {community.status}</p>
-              <p>Created at: {new Date(community.created_at).toLocaleDateString()}</p>
-            </div>
-          ))}
+          <Stack spacing="md">
+            {communities.map((community) => (
+              <Card key={community.id} shadow="sm" padding="lg" radius="md" withBorder>
+                <Group position="apart" mb="xs">
+                  <Text weight={500}>{community.name}</Text>
+                  <Badge color={community.status === 'open' ? 'green' : 'red'} variant="light">
+                    {community.status}
+                  </Badge>
+                </Group>
+                <Tooltip label={community.description} multiline width={220}>
+                  <Text size="sm" color="dimmed" lineClamp={3}>
+                    {community.description}
+                  </Text>
+                </Tooltip>
+                <Flex justify="flex-end" align="center" mt="xs">
+                  <Text size="sm" color="dimmed">
+                    建立於:
+                  </Text>
+                  <Text size="sm" color="dimmed">
+                    {new Date(community.created_at).toLocaleDateString()}
+                  </Text>
+                </Flex>
+              </Card>
+            ))}
+          </Stack>
         </InfiniteScroll>
       )}
-    </div>
+    </Container>
   );
 };
 

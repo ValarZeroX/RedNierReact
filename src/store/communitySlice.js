@@ -31,9 +31,11 @@ const communitySlice = createSlice({
       })
       .addCase(fetchCommunities.fulfilled, (state, action) => {
         state.loading = false;
-        // 使用 Set 來去除重複項
-        const uniqueCommunities = Array.from(new Set([...state.communities, ...action.payload.data].map(JSON.stringify))).map(JSON.parse);
-        state.communities = uniqueCommunities;
+        if (action.payload.current_page === 1) {
+          state.communities = action.payload.data;
+        } else {
+          state.communities = [...state.communities, ...action.payload.data];
+        }
         state.currentPage = action.payload.current_page;
         state.totalPages = action.payload.last_page;
       })

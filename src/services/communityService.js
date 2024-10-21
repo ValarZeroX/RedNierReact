@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getCookie } from '../utils/cookie'; 
 
 const API_URL = 'http://localhost/api'; // 確保這是正確的 API URL
 
@@ -14,6 +15,26 @@ const getCommunities = async (subCategoryId, page) => {
   }
 };
 
+const createCommunity = async (communityData) => {
+  try {
+    await axios.get('http://localhost/sanctum/csrf-cookie', { withCredentials: true });
+    const response = await axios.post(`${API_URL}/communities`, communityData,
+        {
+            withCredentials: true,
+            withXSRFToken: true,
+            headers: {
+              'X-XSRF-TOKEN': getCookie('XSRF-TOKEN'),
+            }
+        }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating community:', error);
+    throw error;
+  }
+};
+
 export const communityService = {
   getCommunities,
+  createCommunity,
 };
