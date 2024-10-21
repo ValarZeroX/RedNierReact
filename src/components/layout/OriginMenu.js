@@ -2,8 +2,11 @@ import React from 'react';
 import { NavLink, Divider } from '@mantine/core';
 import { IconHome, IconFlame, IconMessage, IconPlus } from '@tabler/icons-react';
 import CategoryMenu from '../category/CategoryMenu';
+import { useSelector } from 'react-redux';
 
 function OriginMenu({ onNavigate }) {
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
   return (
     <nav>
       <NavLink
@@ -17,11 +20,13 @@ function OriginMenu({ onNavigate }) {
         onClick={() => onNavigate('/courses')}
       />
       <Divider my="xs" label="討論區" labelPosition="left" />
-      <NavLink
-        label="建立社群"
-        leftSection={<IconPlus size="1rem" stroke={1.5} />}
-        onClick={() => onNavigate('/create-community')}
-      />
+      {isLoggedIn && (
+        <NavLink
+          label="建立社群"
+          leftSection={<IconPlus size="1rem" stroke={1.5} />}
+          onClick={() => onNavigate('/user/create-community')}
+        />
+      )}
       <CategoryMenu />
       <Divider my="xs" label="部落格" labelPosition="left" />
     </nav>

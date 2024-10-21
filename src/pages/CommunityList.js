@@ -56,11 +56,9 @@ const CommunityList = () => {
                     {community.status}
                   </Badge>
                 </Group>
-                <Tooltip label={community.description} multiline width={220}>
                   <Text size="sm" color="dimmed" lineClamp={3}>
                     {community.description}
                   </Text>
-                </Tooltip>
                 <Flex justify="flex-end" align="center" mt="xs">
                   <Text size="sm" color="dimmed">
                     建立於:
