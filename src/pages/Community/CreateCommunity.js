@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Title, TextInput, Textarea, Select, Button, Group, Text, Box } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { communityService } from '../services/communityService';
-import { fetchCategories } from '../services/categoryService';
+import { communityService } from '../../services/communityService';
+import { fetchCategories } from '../../services/categoryService';
 
 const CreateCommunity = () => {
   const navigate = useNavigate();

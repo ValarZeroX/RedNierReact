@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Profile from '../pages/user/Profile';
 import Preferences from '../pages/user/Preferences';
-import CreateCommunity from '../pages/CreateCommunity';
+import CreateCommunity from '../pages/Community/CreateCommunity';
 
 // import Dashboard from '../pages/user/Dashboard';
 // import Settings from '../pages/user/Settings';

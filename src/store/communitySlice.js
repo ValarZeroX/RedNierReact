@@ -19,6 +19,7 @@ const communitySlice = createSlice({
     communities: [],
     currentPage: 1,
     totalPages: 1,
+    currentCommunity: null,
     loading: false,
     error: null,
   },

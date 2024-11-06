@@ -34,7 +34,20 @@ const createCommunity = async (communityData) => {
   }
 };
 
+const getCommunityById = async (communityId) => {
+  try {
+      const response = await axios.get(`${API_URL}/communities/${communityId}`, {
+          withCredentials: true,
+      });
+      return response.data;
+  } catch (error) {
+      throw new Error(error.response?.data?.message || '無法獲取社群資料');
+  }
+};
+
+
 export const communityService = {
   getCommunities,
   createCommunity,
+  getCommunityById
 };

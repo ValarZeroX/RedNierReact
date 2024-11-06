@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { fetchCommunities } from '../store/communitySlice';
+import { useParams, useNavigate } from 'react-router-dom';
+import { fetchCommunities } from '../../store/communitySlice';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Container, Title, Card, Text, Group, Badge, Loader, Stack, Center, Tooltip, Flex } from '@mantine/core';
 
 const CommunityList = () => {
   const dispatch = useDispatch();
   const { subCategoryId } = useParams();
+  const navigate = useNavigate();
   const { communities, currentPage, totalPages, loading, error } = useSelector((state) => state.community);
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     if (subCategoryId) {
       dispatch(fetchCommunities({ subCategoryId, page: 1 }));
-      setHasMore(true);
+      // setHasMore(true);
     }
   }, [dispatch, subCategoryId]);
+
+  useEffect(() => {
+    if (currentPage && totalPages) {
+      setHasMore(currentPage < totalPages);
+    }
+  }, [currentPage, totalPages]);
 
   const loadMoreCommunities = () => {
     if (currentPage < totalPages) {
@@ -45,11 +52,11 @@ const CommunityList = () => {
           next={loadMoreCommunities}
           hasMore={hasMore}
           loader={<Center><Loader size="md" my="md" /></Center>}
-          endMessage={<Center><Text ta="center" mt="md">No more communities to load.</Text></Center>}
+          endMessage={<Center><Text ta="center" mt="md">無需加載資料</Text></Center>}
         >
           <Stack spacing="md">
             {communities.map((community) => (
-              <Card key={community.id} shadow="sm" padding="lg" radius="md" withBorder>
+              <Card key={community.id} shadow="sm" padding="lg" radius="md" withBorder onClick={() => navigate(`/community/${community.id}`)}>
                 <Group position="apart" mb="xs">
                   <Text weight={500}>{community.name}</Text>
                   <Badge color={community.status === 'open' ? 'green' : 'red'} variant="light">
