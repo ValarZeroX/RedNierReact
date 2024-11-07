@@ -9,7 +9,9 @@ export const fetchCommunityById = createAsyncThunk(
       const data = await communityService.getCommunityById(communityId);
       return data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || '获取社区详情时发生错误');
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || error.message || 'An error occurred';
+        return rejectWithValue({ status, message });
     }
   }
 );
@@ -41,7 +43,7 @@ const communityDetailSlice = createSlice({
       })
       .addCase(fetchCommunityById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || '获取社区详情时发生错误';
+        state.error = action.payload || 'An error occurred';
       });
   },
 });

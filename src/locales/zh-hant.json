@@ -29,7 +29,7 @@
         "title": "找不到頁面",
         "description": "您找到了一個秘密的地方。",
         "error": "很抱歉，這只是一個404頁面。您可能輸入了錯誤的地址，或者該頁面已移動到另一個URL。",
-        "button": "返回主頁"
+        "button": "返回首頁"
     },
     "preferences": {
         "title": "偏好設定",
@@ -38,5 +38,9 @@
         "language": "語言",
         "languageDescription": "選擇您的偏好語言。",
         "saveButton": "保存設定"
+    },
+    "error": {
+        "contactAdmin": "請聯絡管理員",
+        "unexpected": "無法預期的錯誤"
     }
 }

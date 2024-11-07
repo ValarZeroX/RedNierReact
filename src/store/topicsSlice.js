@@ -11,6 +11,7 @@ export const fetchTopicsThunk = createAsyncThunk(
       const data = await fetchTopics(communityId, page, 15);
       return data;
     } catch (error) {
+      console.error(error);
       return rejectWithValue(error.message || '無法獲取資料');
     }
   }
